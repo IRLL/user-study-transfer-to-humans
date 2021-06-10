@@ -45,5 +45,5 @@ python -m minigrid.manual_control --env MiniGrid-DoorKey-8x8-v0 --agent_view
 ```
 
 <a href="https://github.com/maximecb/gym-minigrid">
-  <img src="./docs/gifs/Minigrid-KeyDoor-Demo.gif" alt="Minigrid-KeyDoor" align="center">
+  <img src="./docs/gifs/Minigrid-KeyDoor-Demo.gif" alt="Minigrid-KeyDoor">
 </a>
