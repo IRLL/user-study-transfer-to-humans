@@ -16,12 +16,12 @@ git submodule update --init --recursive
 
 Crafting
 ```bach
-pip install -e .\crafting\.
+pip install -e .\crafting
 ```
 
 Minigrid
 ```bach
-pip install -e .\minigrid\.
+pip install -e .\minigrid
 ```
 
 # Quickstart
