@@ -1,0 +1,6 @@
+[submodule "crafting"]
+	path = crafting
+	url = https://github.com/MathisFederico/Crafting.git
+[submodule "minigrid"]
+	path = minigrid
+	url = https://github.com/MathisFederico/gym-minigrid.git
