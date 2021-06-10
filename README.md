@@ -38,16 +38,6 @@ python -m crafting.examples.minecraft.rendering
 
 ## MiniGrid
 
-### FourRooms
-```bach
-python -m minigrid.manual_control --env MiniGrid-FourRooms-v0 --agent_view
-```
-
-<a href="https://github.com/maximecb/gym-minigrid">
-  <img src="./docs/gifs/Minigrid-FourRooms-Demo.gif" alt="Minigrid-FourRooms">
-</a>
-
-
 ### KeyDoor
 ```bach
 python -m minigrid.manual_control --env MiniGrid-DoorKey-8x8-v0 --agent_view
