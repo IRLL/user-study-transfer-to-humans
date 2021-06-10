@@ -32,12 +32,21 @@ Human experiment:
 python -m crafting.examples.minecraft.rendering
 ```
 
+<a href="https://github.com/MathisFederico/Crafting">
+  <img src="./docs/gifs/MineCrafting.gif" alt="MineCrafting">
+</a>
+
 ## MiniGrid
 
 ### FourRooms
 ```bach
 python -m minigrid.manual_control --env MiniGrid-FourRooms-v0 --agent_view
 ```
+
+<a href="https://github.com/maximecb/gym-minigrid">
+  <img src="./docs/gifs/Minigrid-FourRooms-Demo.gif" alt="Minigrid-FourRooms">
+</a>
+
 
 ### KeyDoor
 ```bach
