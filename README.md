@@ -43,3 +43,5 @@ python -m minigrid.manual_control --env MiniGrid-FourRooms-v0 --agent_view
 ```bach
 python -m minigrid.manual_control --env MiniGrid-DoorKey-8x8-v0 --agent_view
 ```
+
+<img src="./docs/gifs/Minigrid-KeyDoor-Demo.gif">
