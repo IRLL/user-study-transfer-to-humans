@@ -23,11 +23,10 @@ def resused_without_cost_utility(k, p):
     return max(0, min(k, p + k - 1))
 
 def complexity(option:Option, options:List, used_nodes:Dict[str, int]=None, 
-        actions_complexities=1, features_complexities=1,
-        _options_in_search=None, _saved_options_complexities=None):
+        actions_complexities=1, features_complexities=1, _options_in_search=None):
 
     try:
-        graph = option.get_graph()
+        graph = option.graph
     except NotImplementedError:
         return 0, used_nodes
 
@@ -35,22 +34,9 @@ def complexity(option:Option, options:List, used_nodes:Dict[str, int]=None,
         _options_in_search = []
     _options_in_search.append(option.option_id)
 
-    if _saved_options_complexities is None:
-        _saved_options_complexities = {}
-
     if used_nodes is None:
         used_nodes = {}
 
-    def _complexity(option:Option, options, used_nodes):
-        if option.option_id in _saved_options_complexities:
-            return _saved_options_complexities[option.option_id]
-        node_complexity, node_used_nodes = \
-            complexity(option, options, used_nodes,
-                _options_in_search=deepcopy(_options_in_search),
-                _saved_options_complexities=deepcopy(_saved_options_complexities))
-        _saved_options_complexities[option.option_id] = (node_complexity, node_used_nodes)
-        return node_complexity, node_used_nodes
-    
     def _get_node_complexity(graph, node, used_nodes):
         node_type = graph.nodes[node]['type']
 
@@ -76,7 +62,8 @@ def complexity(option:Option, options:List, used_nodes:Dict[str, int]=None,
                 node_complexity = np.inf
             else:
                 node_complexity, node_used_nodes = \
-                    _complexity(_option, options, used_nodes)
+                    complexity(_option, options, used_nodes,
+                        _options_in_search=deepcopy(_options_in_search))
 
         elif node_type == 'empty':
             node_used_nodes = {}
