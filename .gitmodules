@@ -4,3 +4,6 @@
 [submodule "minigrid"]
 	path = minigrid
 	url = https://github.com/MathisFederico/gym-minigrid.git
+[submodule "hippo_gym"]
+	path = hippo_gym
+	url = git@github.com:IRLL/HIPPO_Gym.git
