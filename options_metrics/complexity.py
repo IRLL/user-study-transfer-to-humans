@@ -1,8 +1,8 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 from copy import deepcopy, copy
 
 import numpy as np
-from options_metrics import Option
+from options_metrics.option import Option
 
 def update_sum_dict(dict1, dict2):
     dict1, dict2 = deepcopy(dict1), deepcopy(dict2)
@@ -16,14 +16,96 @@ def update_sum_dict(dict1, dict2):
             dict1[key] = val
     return dict1
 
-def linear_g(k):
-    return k
-
-def resused_without_cost_utility(k, p):
+def resused_without_cost_utility(node, k, p):
     return max(0, min(k, p + k - 1))
 
-def complexity(option:Option, options:List, used_nodes:Dict[str, int]=None, 
-        actions_complexities=1, features_complexities=1, _options_in_search=None):
+def linear_k_complexity(node, k):
+    return k
+
+def general_complexity(node, nodes_by_type, used_nodes_all:Dict[str, Dict[str, int]],
+        previous_used_nodes=None,
+        utility=resused_without_cost_utility,
+        kcomplexity=linear_k_complexity,
+        individual_complexities:Union[dict, float]=1.):
+
+    action_nodes, feature_nodes, options_nodes = nodes_by_type
+    previous_used_nodes = previous_used_nodes if previous_used_nodes else {}
+    if not isinstance(individual_complexities, dict):
+        individual_complexities = init_individual_complexities(
+            action_nodes, feature_nodes, individual_complexities)
+
+    total_complexity = 0
+    saved_complexity = 0
+
+    if node in used_nodes_all[node]:
+        used_nodes_all[node].pop(node)
+
+    for _node in used_nodes_all[node]:
+        n_used = used_nodes_all[node][_node]
+        n_previous_used = previous_used_nodes[_node] if _node in previous_used_nodes else 0
+
+        if _node in options_nodes:
+            util = utility(node, n_used, n_previous_used)
+            if util > 0:
+                option_complexity, _ = general_complexity(_node, nodes_by_type, used_nodes_all,
+                    previous_used_nodes=deepcopy(previous_used_nodes),
+                    utility=utility, kcomplexity=kcomplexity)
+                saved_complexity += option_complexity * util
+        else:
+            total_complexity += individual_complexities[_node] * kcomplexity(node, n_used)
+
+        previous_used_nodes = update_sum_dict(previous_used_nodes, {_node: n_used})
+
+    return total_complexity - saved_complexity, saved_complexity
+
+def get_used_nodes(options:Dict[str, Option], used_nodes:Dict[str, int]=None, 
+        individual_complexities:Union[dict, float]=1.):
+    complexities, used_nodes = {}, {}
+    for option_key, option in options.items():
+        if option_key not in complexities:
+            complexity, _used_nodes = get_used_nodes_single_option(option, options, 
+                individual_complexities=individual_complexities)
+            complexities[option_key] = complexity
+            used_nodes[option_key] = _used_nodes
+    return complexities, used_nodes
+
+def init_individual_complexities(action_nodes, feature_nodes,
+    individual_complexities:Union[dict, float]=1.):
+    
+    if isinstance(individual_complexities, (float, int)):
+        individual_complexities = {
+            node:individual_complexities for node in action_nodes + feature_nodes
+        }
+    
+    elif isinstance(individual_complexities, dict):
+        assert all(node in individual_complexities for node in action_nodes + feature_nodes), \
+            "Individual complexities must be given for fundamental actions and features conditions"
+    
+    return individual_complexities
+
+
+def get_nodes_types_lists(options:List[Option]):
+    action_nodes, feature_nodes, option_nodes = [], [], []
+    for option in options:
+        try:
+            graph = option.graph
+        except NotImplementedError:
+            continue
+
+        for node in graph.nodes():
+            if node not in action_nodes + feature_nodes + option_nodes:
+                node_type = graph.nodes[node]['type']
+                if node_type == 'action':
+                    action_nodes.append(node)
+                elif node_type == 'option':
+                    option_nodes.append(node)
+                else:
+                    feature_nodes.append(node)
+    return action_nodes, feature_nodes, option_nodes
+
+def get_used_nodes_single_option(option:Option, options:Dict[str, Option],
+        used_nodes:Dict[str, int]=None, individual_complexities:Union[dict, float]=1.,
+        return_all_nodes=False, _options_in_search=None):
 
     try:
         graph = option.graph
@@ -36,33 +118,26 @@ def complexity(option:Option, options:List, used_nodes:Dict[str, int]=None,
 
     if used_nodes is None:
         used_nodes = {}
+    
+    action_nodes, feature_nodes, _ = get_nodes_types_lists(list(options.values()))
+    individual_complexities = init_individual_complexities(
+        action_nodes, feature_nodes, individual_complexities)
 
     def _get_node_complexity(graph, node, used_nodes):
         node_type = graph.nodes[node]['type']
 
-        if node_type == 'action':
+        if node_type in ('action', 'feature_check'):
             node_used_nodes = {node:1}
-            if isinstance(actions_complexities, dict):
-                node_complexity = actions_complexities[node]
-            else:
-                node_complexity = actions_complexities
-
-        elif node_type == 'feature_check':
-            node_used_nodes = {node:1}
-            if isinstance(features_complexities, dict):
-                node_complexity = features_complexities[node]
-            else:
-                node_complexity = features_complexities
+            node_complexity = individual_complexities[node]
 
         elif node_type == 'option':
-            _option = options[graph.nodes[node]['option_key']]
-
+            _option = options[node]
             if _option.option_id in _options_in_search:
                 node_used_nodes = {}
                 node_complexity = np.inf
             else:
                 node_complexity, node_used_nodes = \
-                    complexity(_option, options, used_nodes,
+                    get_used_nodes_single_option(_option, options, used_nodes,
                         _options_in_search=deepcopy(_options_in_search))
 
         elif node_type == 'empty':
@@ -117,4 +192,7 @@ def complexity(option:Option, options:List, used_nodes:Dict[str, int]=None,
             nodes_used_nodes[node] = node_used_nodes
 
     root = nodes_by_level[0][0]
+    nodes_used_nodes[root] = update_sum_dict(nodes_used_nodes[root], {option.option_id: 1})
+    if return_all_nodes:
+        return complexities, nodes_used_nodes
     return complexities[root], nodes_used_nodes[root]
