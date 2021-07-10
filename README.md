@@ -42,6 +42,11 @@ Enter the submodule:
 cd hippo_gym
 ```
 
+Install requirements:
+```bach
+pip install -r requirements.txt
+```
+
 Launch the local hosted server:
 ```bach
 python App/communicator.py dev
