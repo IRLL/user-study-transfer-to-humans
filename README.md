@@ -27,13 +27,29 @@ pip install -e .\minigrid
 # Quickstart
 
 ## Crafting
-Human experiment:
+### Manual run
 ```bach
 python -m crafting.examples.minecraft.rendering
 ```
 
 <a href="https://github.com/MathisFederico/Crafting">
   <img src="./docs/gifs/MineCrafting.gif" alt="MineCrafting">
+</a>
+
+### HippoGym run
+Enter the submodule:
+```bach
+cd hippo_gym
+```
+
+Launch the local hosted server:
+```bach
+python App/communicator.py dev
+```
+
+Go to the local hosted frontend in a browser:
+<a href="https://testing.irll.net/?server=ws://localhost:5000">
+  <img src="./docs/gifs/Crafting-Hippogym.gif" alt="MineCrafting on HippoGym">
 </a>
 
 ## MiniGrid
