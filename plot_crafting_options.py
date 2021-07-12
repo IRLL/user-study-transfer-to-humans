@@ -1,3 +1,4 @@
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -30,21 +31,34 @@ for rank in complexity_rank:
     saved_complexity = options_learning_complexities[rank, 1]
     print(f"{complexity}\t\t| {learning_complexity}\t\t| {saved_complexity}\t\t| {title}")
 
-    # if hasattr(option, 'draw_graph'):
-    #     title += f" - Learning complexity:{learning_complexity}"
-    #     title += f" - Complexity:{complexity}"
-    #     fig, ax = plt.subplots()
-    #     option.draw_graph(ax)
-    #     plt.title(title)
-    #     plt.show()
+    if hasattr(option, 'draw_graph'):
+        options_images_path = os.path.join('images', 'options_graphs')
+        if not os.path.exists(options_images_path):
+            os.makedirs(options_images_path)
+        title += f" - Learning complexity:{learning_complexity}"
+        title += f" - Complexity:{complexity}"
+        fig, ax = plt.subplots()
+        option.draw_graph(ax)
+        ax.set_axis_off()
+        plt.title(title)
 
-diplay_names = diplay_names[complexity_rank]
-options_complexities = options_complexities[complexity_rank]
-options_learning_complexities = options_learning_complexities[complexity_rank]
-plt.title('Total complexity vs Learning complexity')
-plt.bar(diplay_names, options_complexities, label='total complexity')
-plt.bar(diplay_names, options_learning_complexities[:, 0], label='learning complexity')
-plt.xticks(rotation=45, ha='right')
-plt.legend()
-plt.tight_layout()
-plt.show()
+        option_name = '_'.join(option_name.lower().split(' '))
+        option_title = f'option-{int(learning_complexity)}-{option_name}.png'
+        dpi = 96
+        width, height = (1056, 719)
+        fig.set_size_inches(width/dpi, height/dpi)
+        plt.tight_layout()
+        save_path = os.path.join(options_images_path, option_title)
+        plt.savefig(save_path, dpi=dpi)
+        plt.close()
+
+# diplay_names = diplay_names[complexity_rank]
+# options_complexities = options_complexities[complexity_rank]
+# options_learning_complexities = options_learning_complexities[complexity_rank]
+# plt.title('Total complexity vs Learning complexity')
+# plt.bar(diplay_names, options_complexities, label='total complexity')
+# plt.bar(diplay_names, options_learning_complexities[:, 0], label='learning complexity')
+# plt.xticks(rotation=45, ha='right')
+# plt.legend()
+# plt.tight_layout()
+# plt.show()
