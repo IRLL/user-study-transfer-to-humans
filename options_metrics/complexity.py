@@ -22,7 +22,7 @@ def resused_without_cost_utility(node, k, p):
 def linear_k_complexity(node, k):
     return k
 
-def general_complexity(node, nodes_by_type, used_nodes_all:Dict[str, Dict[str, int]],
+def general_complexity(option_id, nodes_by_type, used_nodes_all:Dict[str, Dict[str, int]],
         previous_used_nodes=None,
         utility=resused_without_cost_utility,
         kcomplexity=linear_k_complexity,
@@ -37,24 +37,26 @@ def general_complexity(node, nodes_by_type, used_nodes_all:Dict[str, Dict[str, i
     total_complexity = 0
     saved_complexity = 0
 
-    if node in used_nodes_all[node]:
-        used_nodes_all[node].pop(node)
+    if option_id in used_nodes_all[option_id]:
+        used_nodes_all[option_id].pop(option_id)
 
-    for _node in used_nodes_all[node]:
-        n_used = used_nodes_all[node][_node]
-        n_previous_used = previous_used_nodes[_node] if _node in previous_used_nodes else 0
+    for node in used_nodes_all[option_id]:
+        n_used = used_nodes_all[option_id][node]
+        n_previous_used = previous_used_nodes[node] if node in previous_used_nodes else 0
 
-        if _node in options_nodes:
+        if node in options_nodes:
             util = utility(node, n_used, n_previous_used)
             if util > 0:
-                option_complexity, _ = general_complexity(_node, nodes_by_type, used_nodes_all,
+                option_complexity, _ = general_complexity(
+                    node, nodes_by_type,used_nodes_all,
                     previous_used_nodes=deepcopy(previous_used_nodes),
-                    utility=utility, kcomplexity=kcomplexity)
+                    utility=utility, kcomplexity=kcomplexity
+                )
                 saved_complexity += option_complexity * util
         else:
-            total_complexity += individual_complexities[_node] * kcomplexity(node, n_used)
+            total_complexity += individual_complexities[node] * kcomplexity(node, n_used)
 
-        previous_used_nodes = update_sum_dict(previous_used_nodes, {_node: n_used})
+        previous_used_nodes = update_sum_dict(previous_used_nodes, {node: n_used})
 
     return total_complexity - saved_complexity, saved_complexity
 
