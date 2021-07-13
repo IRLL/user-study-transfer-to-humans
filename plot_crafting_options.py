@@ -4,6 +4,7 @@ import numpy as np
 
 from crafting.examples.minecraft.world import McWorld
 from options_metrics.complexity import get_used_nodes, general_complexity, get_nodes_types_lists
+from options_metrics.binary_utility import binary_graphbased_utility
 
 MC_WORLD = McWorld()
 ALL_OPTIONS = MC_WORLD.get_all_options()
@@ -22,9 +23,24 @@ complexity_rank = np.argsort(options_complexities)
 diplay_names = np.array([name.split('(')[0] for name in options_keys])
 print("TotalComplexity\t| Complexity\t| SavedComplexity\t| Option")
 print("------------------------------------------------------")
+
+solving_options = {
+    'gather_wood': [ALL_OPTIONS["Get Wood(17)"]],
+    'gather_stone': [ALL_OPTIONS["Get Cobblestone(4)"]],
+    'obtain_book': [ALL_OPTIONS["Get Book(340)"]],
+    'obtain_diamond': [ALL_OPTIONS["Get Diamond(264)"]],
+    'obtain_clock': [ALL_OPTIONS["Get Clock(347)"]],
+    'obtain_enchanting_table': [ALL_OPTIONS["Get Enchanting_table(116)"]],
+}
+
 for rank in complexity_rank:
     option_name = diplay_names[rank]
     option = ALL_OPTIONS[options_keys[rank]]
+    is_useful = [
+        str(int(binary_graphbased_utility(option, solving_options[task], all_used_nodes)))
+        for task in solving_options
+    ]
+    utilities = "".join(is_useful)
     title = str(option_name)
     complexity = options_complexities[rank]
     learning_complexity = options_learning_complexities[rank, 0]
@@ -43,7 +59,7 @@ for rank in complexity_rank:
         plt.title(title)
 
         option_name = '_'.join(option_name.lower().split(' '))
-        option_title = f'option-{int(learning_complexity)}-{option_name}.png'
+        option_title = f'option-{int(learning_complexity)}-{utilities}-{option_name}.png'
         dpi = 96
         width, height = (1056, 719)
         fig.set_size_inches(width/dpi, height/dpi)
