@@ -61,10 +61,10 @@ for rank in complexity_rank:
         option_name = '_'.join(option_name.lower().split(' '))
         option_title = f'option-{int(learning_complexity)}-{utilities}-{option_name}.png'
         dpi = 96
-        width, height = (1056, 719)
+        width, height = (1920, 1080)
         fig.set_size_inches(width/dpi, height/dpi)
         plt.tight_layout()
-        show = True
+        show = False
         if show:
             plt.show()
         else:

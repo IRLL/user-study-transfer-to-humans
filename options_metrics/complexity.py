@@ -7,12 +7,9 @@ from options_metrics.option import Option
 def update_sum_dict(dict1, dict2):
     dict1, dict2 = deepcopy(dict1), deepcopy(dict2)
     for key, val in dict2.items():
-        if key in dict1:
-            if isinstance(val, dict):
-                dict1[key] = update_sum_dict(dict1[key], val)
-            else:
-                dict1[key] += val
-        else:
+        try:
+            dict1[key] += val
+        except KeyError:
             dict1[key] = val
     return dict1
 

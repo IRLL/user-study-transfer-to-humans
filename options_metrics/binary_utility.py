@@ -18,6 +18,8 @@ def binary_graphbased_utility(option:Option, solving_options:List[Option],
     for solving_option in solving_options:
         if option.option_id == solving_option.option_id:
             return True
+        if option.option_id in solving_option.graph.nodes():
+            return True
         if option.option_id in used_nodes[solving_option.option_id] and\
             used_nodes[solving_option.option_id][option.option_id] > 0:
             return True
