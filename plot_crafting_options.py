@@ -64,9 +64,13 @@ for rank in complexity_rank:
         width, height = (1056, 719)
         fig.set_size_inches(width/dpi, height/dpi)
         plt.tight_layout()
-        save_path = os.path.join(options_images_path, option_title)
-        plt.savefig(save_path, dpi=dpi)
-        plt.close()
+        show = True
+        if show:
+            plt.show()
+        else:
+            save_path = os.path.join(options_images_path, option_title)
+            plt.savefig(save_path, dpi=dpi)
+            plt.close()
 
 # diplay_names = diplay_names[complexity_rank]
 # options_complexities = options_complexities[complexity_rank]
