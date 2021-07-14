@@ -95,14 +95,13 @@ def get_nodes_types_lists(options:List[Option]):
             continue
 
         for node in graph.nodes():
-            if node not in action_nodes + feature_nodes + option_nodes:
-                node_type = graph.nodes[node]['type']
-                if node_type == 'action':
-                    action_nodes.append(node)
-                elif node_type == 'option':
-                    option_nodes.append(node)
-                else:
-                    feature_nodes.append(node)
+            node_type = graph.nodes[node]['type']
+            if node_type == 'action' and node not in action_nodes:
+                action_nodes.append(node)
+            elif node_type == 'option' and node not in option_nodes:
+                option_nodes.append(node)
+            elif node_type == 'feature_check' and node not in feature_nodes:
+                feature_nodes.append(node)
     return action_nodes, feature_nodes, option_nodes
 
 def get_used_nodes_single_option(option:Option, options:Dict[str, Option],
