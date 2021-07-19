@@ -1,5 +1,6 @@
 import os
 import matplotlib.pyplot as plt
+
 import numpy as np
 from tqdm import tqdm
 
@@ -23,7 +24,6 @@ for option_key in tqdm(options_keys, desc=desc, total=len(options_keys)):
     options_learning_complexities.append(complexity)
 options_learning_complexities = np.array(options_learning_complexities)
 complexity_rank = np.argsort(options_complexities)
-
 
 diplay_names = np.array([name.split('(')[0] for name in options_keys])
 print("TotalComplexity\t| Complexity\t| SavedComplexity\t| Option")
@@ -59,7 +59,9 @@ for rank in complexity_rank:
         title += f" - Learning complexity:{learning_complexity}"
         title += f" - Complexity:{complexity}"
         fig, ax = plt.subplots()
-        option.draw_graph(ax)
+        fig.set_facecolor('#181a1b')
+        ax.set_facecolor('#181a1b')
+        option.draw_graph(ax, fontcolor='white')
         ax.set_axis_off()
 
         option_name = '_'.join(option_name.lower().split(' '))
