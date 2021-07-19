@@ -1,6 +1,7 @@
 import os
 import matplotlib.pyplot as plt
 import numpy as np
+from tqdm import tqdm
 
 from crafting.examples.minecraft.world import McWorld
 from options_metrics.complexity import get_used_nodes, general_complexity, get_nodes_types_lists
@@ -9,14 +10,18 @@ from options_metrics.binary_utility import binary_graphbased_utility
 MC_WORLD = McWorld()
 ALL_OPTIONS = MC_WORLD.get_all_options()
 
-all_complexities, all_used_nodes = get_used_nodes(ALL_OPTIONS)
+all_complexities, all_used_nodes = get_used_nodes(ALL_OPTIONS, verbose=1)
 nodes_by_type = get_nodes_types_lists(list(ALL_OPTIONS.values()))
 
 options_keys = np.array(list(ALL_OPTIONS.keys()))
 options_complexities = np.array([all_complexities[option_key] for option_key in options_keys])
-options_learning_complexities = np.array([
-    np.array(general_complexity(option_key, nodes_by_type, all_used_nodes))
-    for option_key in options_keys])
+
+options_learning_complexities = []
+desc = 'Computing options complexities'
+for option_key in tqdm(options_keys, desc=desc, total=len(options_keys)):
+    complexity = np.array(general_complexity(option_key, nodes_by_type, all_used_nodes))
+    options_learning_complexities.append(complexity)
+options_learning_complexities = np.array(options_learning_complexities)
 complexity_rank = np.argsort(options_complexities)
 
 
@@ -56,16 +61,17 @@ for rank in complexity_rank:
         fig, ax = plt.subplots()
         option.draw_graph(ax)
         ax.set_axis_off()
-        plt.title(title)
 
         option_name = '_'.join(option_name.lower().split(' '))
         option_title = f'option-{int(learning_complexity)}-{utilities}-{option_name}.png'
         dpi = 96
-        width, height = (1920, 1080)
+        resolution = 720
+        width, height = (int(16/9 * resolution), resolution)
         fig.set_size_inches(width/dpi, height/dpi)
         plt.tight_layout()
         show = False
         if show:
+            plt.title(title)
             plt.show()
         else:
             save_path = os.path.join(options_images_path, option_title)

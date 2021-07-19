@@ -1,7 +1,9 @@
 from typing import Dict, List, Union
-from copy import deepcopy, copy
+from copy import deepcopy
 
 import numpy as np
+from tqdm import tqdm
+
 from options_metrics.option import Option
 
 def update_sum_dict(dict1, dict2):
@@ -58,9 +60,13 @@ def general_complexity(option_id, nodes_by_type, used_nodes_all:Dict[str, Dict[s
     return total_complexity - saved_complexity, saved_complexity
 
 def get_used_nodes(options:Dict[str, Option], used_nodes:Dict[str, int]=None, 
-        individual_complexities:Union[dict, float]=1.):
+        individual_complexities:Union[dict, float]=1., verbose=0):
     complexities, used_nodes = {}, {}
-    for option_key, option in options.items():
+
+    iterator = tqdm(options.items(), total=len(options), desc='Building options histograms') \
+        if verbose > 0 else options.items()
+
+    for option_key, option in iterator:
         if option_key not in complexities:
             complexity, _used_nodes = get_used_nodes_single_option(option, options, 
                 individual_complexities=individual_complexities)
