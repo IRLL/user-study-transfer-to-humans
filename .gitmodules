@@ -7,3 +7,6 @@
 [submodule "hippo_gym"]
 	path = hippo_gym
 	url = git@github.com:IRLL/HIPPO_Gym.git
+[submodule "options_graphs"]
+	path = options_graphs
+	url = https://github.com/IRLL/options_graphs.git

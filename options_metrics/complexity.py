@@ -4,7 +4,7 @@ from copy import deepcopy
 import numpy as np
 from tqdm import tqdm
 
-from options_metrics.option import Option
+from option_graph import Option
 
 def update_sum_dict(dict1, dict2):
     dict1, dict2 = deepcopy(dict1), deepcopy(dict2)

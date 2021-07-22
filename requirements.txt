@@ -1,3 +1,2 @@
-learnrl>=1.0.0
-wandb
 tqdm
+./options_graphs/

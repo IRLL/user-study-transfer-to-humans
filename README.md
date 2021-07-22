@@ -12,7 +12,13 @@ Design of HRL options metrics for AI to Human teaching
 git submodule update --init --recursive
 ```
 
-3. Install submodules
+3. Install requirements
+
+```bach
+pip install -r requirements.txt
+```
+
+4. Install domains of interest
 
 Crafting
 ```bach

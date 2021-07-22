@@ -1,5 +1,5 @@
 from typing import List, Dict
-from options_metrics.option import Option
+from option_graph import Option
 
 def binary_graphbased_utility(option:Option, solving_options:List[Option],
         used_nodes:Dict[str, Dict[str, int]]) -> bool:
