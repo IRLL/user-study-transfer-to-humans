@@ -1,2 +1,2 @@
 tqdm
-./options_graphs/
+option-graph @ git+https://github.com/IRLL/options_graphs.git#egg=option-graph
