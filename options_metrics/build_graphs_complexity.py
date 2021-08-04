@@ -4,9 +4,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
 
+from option_graph.metrics.complexity import general_complexity
+from option_graph.metrics.complexity.histograms import get_used_nodes, get_nodes_types_lists
+from option_graph.metrics.utility import binary_graphbased_utility
+
 from crafting.examples.minecraft.world import McWorld
-from options_metrics.complexity import get_used_nodes, general_complexity, get_nodes_types_lists
-from options_metrics.binary_utility import binary_graphbased_utility
 
 MC_WORLD = McWorld()
 ALL_OPTIONS = MC_WORLD.get_all_options()
@@ -42,10 +44,10 @@ for rank in complexity_rank:
     option_name = diplay_names[rank]
     option = ALL_OPTIONS[options_keys[rank]]
     is_useful = [
-        str(int(binary_graphbased_utility(option, solving_options[task], all_used_nodes)))
-        for task in solving_options
+        str(int(binary_graphbased_utility(option, solving_option, all_used_nodes)))
+        for _, solving_option in solving_options.items()
     ]
-    utilities = "".join(is_useful)
+    is_useful = "".join(is_useful)
     title = str(option_name)
     complexity = options_complexities[rank]
     learning_complexity = options_learning_complexities[rank, 0]
@@ -61,11 +63,11 @@ for rank in complexity_rank:
         fig, ax = plt.subplots()
         fig.set_facecolor('#181a1b')
         ax.set_facecolor('#181a1b')
-        option.draw_graph(ax, fontcolor='white')
+        option.graph.draw(ax, fontcolor='white')
         ax.set_axis_off()
 
         option_name = '_'.join(option_name.lower().split(' '))
-        option_title = f'option-{int(learning_complexity)}-{utilities}-{option_name}.png'
+        option_title = f'option-{int(learning_complexity)}-{is_useful}-{option_name}.png'
         dpi = 96
         width, height = (1056, 719)
         fig.set_size_inches(width/dpi, height/dpi)
