@@ -55,7 +55,7 @@ pip install -r requirements.txt
 
 Launch the local hosted server:
 ```bach
-python App/communicator.py dev
+python -m App dev
 ```
 
 Go to the local hosted frontend in a browser:
