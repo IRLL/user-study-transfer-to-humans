@@ -1,31 +1,33 @@
 # HRL-options-metrics
-Design of HRL options metrics for AI to Human teaching
 
+Design of HRL options metrics for AI to Human teaching
 
 # Installation
 
-1. git clone this repository.
+1.  git clone this repository.
 
-2. Initialize submodules:
+2.  Initialize submodules:
 
 ```bach
 git submodule update --init --recursive
 ```
 
-3. Install requirements
+3.  Install requirements
 
 ```bach
 pip install -r requirements.txt
 ```
 
-4. Install domains of interest
+4.  Install domains of interest
 
 Crafting
+
 ```bach
 pip install -e .\crafting
 ```
 
 Minigrid
+
 ```bach
 pip install -e .\minigrid
 ```
@@ -33,7 +35,9 @@ pip install -e .\minigrid
 # Quickstart
 
 ## Crafting
+
 ### Manual run
+
 ```bach
 python -m crafting.examples.minecraft.rendering
 ```
@@ -43,22 +47,27 @@ python -m crafting.examples.minecraft.rendering
 </a>
 
 ### HippoGym run
+
 Enter the submodule:
+
 ```bach
 cd hippo_gym
 ```
 
 Install requirements:
+
 ```bach
 pip install -r requirements.txt
 ```
 
-Launch the local hosted server:
+Launch the local hosted server in dev mode:
+
 ```bach
 python -m App dev
 ```
 
-Go to the local hosted frontend in a browser:
+Go to local hosted frontend in a browser: [App](https://testing.irll.net/?server=ws://localhost:5000) or [Debug](https://irll.net/?server=ws://localhost:5000&debug=true).
+
 <a href="https://testing.irll.net/?server=ws://localhost:5000">
   <img src="./docs/gifs/Crafting-Hippogym.gif" alt="MineCrafting on HippoGym">
 </a>
@@ -66,6 +75,7 @@ Go to the local hosted frontend in a browser:
 ## MiniGrid
 
 ### KeyDoor
+
 ```bach
 python -m minigrid.manual_control --env MiniGrid-DoorKey-8x8-v0 --agent_view
 ```
