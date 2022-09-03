@@ -1,6 +1,7 @@
-# HRL-options-metrics
+# Hierachical explanation graphs : User study
 
-Design of HRL options metrics for AI to Human teaching
+Design of hierachical explanation as graphs for AI to Human teaching.
+The goal of this research is to study graphs as a mean to transfer knowledge to humans.
 
 # Installation
 
