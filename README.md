@@ -40,7 +40,7 @@ pip install -e .\minigrid
 ### Manual run
 
 ```bach
-python -m crafting.examples.minecraft.rendering
+python -m crafting.examples.minecraft
 ```
 
 <a href="https://github.com/MathisFederico/Crafting">
