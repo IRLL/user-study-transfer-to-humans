@@ -1,7 +1,45 @@
-# Hierachical explanation graphs : User study
+# User study: AI to Human teaching
 
-Design of hierachical explanation as graphs for AI to Human teaching.
-The goal of this research is to study graphs as a mean to transfer knowledge to humans.
+# Research objective
+
+The purpose of this research is to find a medium to transfer knowledge from reinforcement learning (RL) agents to humans. This medium should enable the latter to perform comparably with explanations given by other humans.
+
+## Asumptions
+
+This research is done assuming that the following statements are true:
+
+1.  Humans are able to transfer knowledge to others about any computable domain using either natural language or a whiteboard.
+2.  Each tested medium can be used to represent the policy of any RL agents (An inefficient way is valid).
+3.  Each tested medium can be understood by most humans with a short explanation of their functioning.
+
+This research will not attempt to prove those statements as it will ony be useful if the research results are positive.
+
+## Hypotheses
+
+This research will evaluate the following hypotheses:
+
+1.  Some mediums are better than others when it comes to transfering knowledge to humans.
+2.  Providing [Hierarchical Behavior Explanations as Graphs](https://github.com/IRLL/options_graphs) (HBEG) is comparable to an other human explanation on the following evaluation metrics and domains.
+
+## Evaluation Metrics
+
+1.  Best performance on an episode of the task
+2.  Real time speed of performance increase of the task
+3.  Ability to reproduce the task without any given explanation after a short time
+
+## Knowledge Mediums
+
+-   Nothing (Human must learn by reinforcment itself)
+-   Step instruction (Output of the policy)
+-   Other human written instructions
+-   Other human graphical instructions
+-   [Hierarchical Behavior Explanations as Graphs](https://github.com/IRLL/options_graphs) (HBEG)
+
+## Domains
+
+-   The [Crafting environment](https://github.com/IRLL/Crafting) for arbitrary hierarchical tasks.
+-   The [MineCrafting environment](https://github.com/IRLL/Crafting/tree/master/crafting/examples/minecraft) for MineCraft hierarchical tasks without the complex 3D navigation.
+-   The [Minigrid environment](https://github.com/MathisFederico/gym-minigrid/) for classic 2D navigation.
 
 # Installation
 
